@@ -514,6 +514,18 @@ body {
   height: 21px;
 }
 
+/* Dark mode: flip GitHub button so it stays dark bg / light icon */
+[data-theme="dark"] .gh-btn {
+  background: var(--card);
+  color: var(--fg);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .gh-btn {
+    background: var(--card);
+    color: var(--fg);
+  }
+}
+
 /* ── Skeletons ── */
 .skel {
   border-radius: 22px;
