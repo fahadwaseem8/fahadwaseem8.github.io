@@ -1,4 +1,5 @@
 const INFO = {
+  title: "Fahad Waseem",
   username: "fahadwaseem8",
   avatar: "https://avatars.githubusercontent.com/u/60786655",
   github: "https://github.com/fahadwaseem8",

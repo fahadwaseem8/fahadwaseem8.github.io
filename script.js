@@ -1,11 +1,12 @@
 document.getElementById("ava").src = INFO.avatar;
 document.getElementById("ava").alt = INFO.username;
-document.title = INFO.username;
+document.title = INFO.title;
 document.getElementById("github-btn").href = INFO.github;
 
 const favicon = document.createElement("link");
 favicon.rel = "icon";
-favicon.href = INFO.avatar;
+favicon.type = "image/png";
+favicon.href = "https://cdn-icons-png.flaticon.com/512/5576/5576886.png";
 document.head.appendChild(favicon);
 
 const SOCIALS = [
