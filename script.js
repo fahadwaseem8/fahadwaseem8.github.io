@@ -1,3 +1,12 @@
+/* ── Theme management ── */
+(function () {
+  const stored = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = stored || (prefersDark ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", theme);
+})();
+
+
 document.getElementById("ava").src = INFO.avatar;
 document.getElementById("ava").alt = INFO.username;
 document.title = INFO.title;
@@ -8,6 +17,29 @@ favicon.rel = "icon";
 favicon.type = "image/png";
 favicon.href = "https://cdn-icons-png.flaticon.com/512/5576/5576886.png";
 document.head.appendChild(favicon);
+
+/* Wire up theme toggle button */
+const themeToggle = document.getElementById("theme-toggle");
+function getCurrentTheme() {
+  return document.documentElement.getAttribute("data-theme");
+}
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+}
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const next = getCurrentTheme() === "dark" ? "light" : "dark";
+    setTheme(next);
+  });
+}
+
+/* Listen for OS-level preference changes */
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+  if (!localStorage.getItem("theme")) {
+    document.documentElement.setAttribute("data-theme", e.matches ? "dark" : "light");
+  }
+});
 
 const SOCIALS = [
   {
@@ -120,9 +152,14 @@ function loop() {
   spark.style.top = sparkY + "px";
 
   const isGreen = inPhase(t, PHASES.activeCard[0], PHASES.activeCard[1]);
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const sparkDark = isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.15)";
+  const sparkMid = isDark ? "#d0d0d8" : "#111";
+  const sparkGreen = isDark ? "rgba(34,197,94,0.3)" : "rgba(22,163,74,0.3)";
+  const sparkGreenMid = isDark ? "#22c55e" : "#16a34a";
   spark.style.background = isGreen
-    ? "linear-gradient(to bottom, transparent 0%, rgba(22,163,74,0.3) 20%, #16a34a 50%, rgba(22,163,74,0.3) 80%, transparent 100%)"
-    : "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.15) 20%, #111 50%, rgba(0,0,0,0.15) 80%, transparent 100%)";
+    ? `linear-gradient(to bottom, transparent 0%, ${sparkGreen} 20%, ${sparkGreenMid} 50%, ${sparkGreen} 80%, transparent 100%)`
+    : `linear-gradient(to bottom, transparent 0%, ${sparkDark} 20%, ${sparkMid} 50%, ${sparkDark} 80%, transparent 100%)`;
 
   const ava = document.querySelector(".ava");
   if (ava) ava.classList.toggle("pulse-green", isGreen);
